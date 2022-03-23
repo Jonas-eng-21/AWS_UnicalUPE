@@ -1,15 +1,13 @@
 @startuml
 !include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Context.puml
 
-LAYOUT_WITH_LEGEND()
+Person(pbc, "Usuário", "Usuarios do sistema que acessam os calendários")
+System(ibs, "Sistema UnicalUPE", "Permite que os usuários visualizem o calendário acadêmico. Podem receber notificações e adicionar/gerenciar informações ao calendário")
+System(es, "Google Authenticator", "realizado através da autenticação com o login do google")
+System(mbs, "Servidor UnicalUPE", "Responsável por salvar os dados, fornecer informações, enviar notificaçõesa ao usuário, validar campos")
 
-Person(pbc, "Personal Banking Customer", "A customer of the bank, with personal bank accounts.")
-System(ibs, "Internet Banking System", "Allows customers to view information about their bank accounts, and make payments.")
-System_Ext(es, "E-mail system", "The internal Microsoft Exchange e-mail system.")
-System_Ext(mbs, "Mainframe Banking System", "Stores all of the core banking information about customers, accounts, transactions, etc.")
-
-Rel(pbc, ibs, "Uses")
-Rel(es, pbc, "Sends e-mails to")
-Rel(ibs, es, "Sends e-mails", "SMTP")
-Rel(ibs, mbs, "Uses")
+Rel(pbc, ibs, "Usuários")
+Rel(es, pbc, "Envia e-mails de atutenticação")
+Rel(ibs, es, "Solicita Login")
+Rel(ibs, mbs, "Usuários")
 @enduml
