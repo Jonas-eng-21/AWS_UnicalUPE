@@ -1,9 +1,16 @@
 @startuml
 !include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Component.puml
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+!include FONTAWESOME/users.puml
 
 LAYOUT_WITH_LEGEND()
 
-Container(api, "API Application", "java and Spring MVC", "Delivers the static content and the internet banking single page application.")
+Person(users, "Users", "Usuarios do sistema que acessam os calendários ( Usuário comum, Anônimo e admin)",  $sprite="users")
+
+Container(api, "API Authenticator", "Sistema de autenticação do Google", "Sistema de chamada da API para o google Authenticator para login ou cadastro.")
+Container(client, "API sistema", "API do sistema", "Conexão do sistema com  o BD a partir dos controladores ( Usuário, Evento e Notificação) .")
+
 
 Container_Boundary(spa, "Single Page Application") {
     Component(routing, "Routing", "React router", "Handler slient side routing")
@@ -14,6 +21,9 @@ Container_Boundary(spa, "Single Page Application") {
 
 Rel(spa, api, "Uses", "JSON/HTTPS")
 
+Rel(users, profile, "Uses");
+Rel(users, login, "Uses");
+Rel(users, routing, "Uses");
 Rel(login, store, "Uses");
 Rel(routing, store, "Uses");
 Rel(profile, store, "Uses");
