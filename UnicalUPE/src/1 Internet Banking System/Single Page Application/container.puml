@@ -13,13 +13,14 @@ Container(client, "API sistema", "API do sistema", "Conexão do sistema com  o B
 
 
 Container_Boundary(spa, "Single Page Application") {
-    Component(routing, "Routing", "React router", "Handler slient side routing")
+    Component(routing, "Calendário", "...", "sistema de visualização, edição e adição de novos eventos")
     Component(store, "Data Store", "Redux", "The central object holding the application state")
-    Component(login, "Login form", "React Class", "The login page")
+    Component(login, "Formulario de Login", "React Class", "Lugar onde oo usuário irá conectar como usuário comum, anônimo ou admin")
     Component(profile, "Profile Page", "React Class", "The page where the logged in user can view and edit his/her information")
 }
 
 Rel(spa, api, "Uses", "JSON/HTTPS")
+Rel(spa, client, "Uses", "JSON/HTTPS")
 
 Rel(users, profile, "Uses");
 Rel(users, login, "Uses");
