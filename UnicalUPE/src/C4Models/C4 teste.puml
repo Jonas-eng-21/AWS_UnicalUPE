@@ -1,0 +1,51 @@
+@startuml
+!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Component.puml
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+!include FONTAWESOME/users.puml
+!include FONTAWESOME/server.puml
+
+Component(Mobapp, "Mobile app", "React Native", "Dentro da aplicação o usuário tem acesso a ações como visitar o calendário, visualizar eventos, acesso a lista de eventos, notificaçoes dos eventos")
+
+Container_Boundary(spas, "API Sistema") {
+    Component(getEventsAll, "Eventos", "Request de todos os eventos")
+    Component(getEventsByCourse, "Eventos de cada área", "Request de eventos a partir do id de cada curso espercífico")
+    Component(getEventsByDate, "Eventos de cada área", "Request do evento a partir de uma data específica")
+    Component(getEventByUser, "Eventos de cada área", "Request do evento a partir do id do usuário")
+    Component(postEvent, "Criação de eventos", "Adiciona novos eventos ao banco de dados")
+    Component(updateEvent, "Atualização de eventos", "Atualiza eventos no banco de dados")
+    Component(deleteEvent, "Exclusão de eventos", "Esclui eventos no banco de dados a partir do id do usuário criador")
+    Component(createEventJsonKeys, "Criação de chaves", "Criação de chaves JSON para eventos")
+    Component(timeLineEvents, "Cria lista de eventos ", "Retorna lista de eventos a partir do tempo em que foi adicionado")
+    Component(getAllCourses, "Retorna os cursos ", "Retorna os cursos")
+    Component(currentCourses, "Retorna os cursos atual ", "Retorna os cursos atual")
+    Component(getNotificationsByUserEmail, "Notificação por usuário", "Retorna notificações através do email do usuário")
+    Component(getNotificationsByCategory, "Notificação por categoria", "Retorna notificações através da categoria do usuário")
+    Component(updateNotification, "Atualizar Notificações", "Atualiza as notificações do usuário")
+    Component(deleteNotification, "Deleta Notificações", "Deleta as notificações do usuário")
+   
+}
+
+ContainerDb(bdados, "Banco de Dados", "PostgreSQL", "Verifica os dados do usuário solcitado para a função handleProfile ", "msql_server")
+
+
+Rel(Mobapp, getEventsAll, "Faz Chamadas De API Para", "JSON/HTTPS")
+
+
+Rel(getEventsAll, bdados, "usa");
+Rel(getEventsByCourse, bdados, "usa");
+Rel(getEventsByDate, bdados, "usa");
+Rel(getEventByUser, bdados, "usa");
+Rel(postEvent, bdados, "usa");
+Rel(updateEvent, bdados, "usa");
+Rel(deleteEvent, bdados, "usa");
+Rel(createEventJsonKeys, bdados, "usa");
+Rel(timeLineEvents, bdados, "usa");
+Rel(getAllCourses, bdados, "usa");
+Rel(currentCourses, bdados, "usa");
+Rel(getNotificationsByUserEmail, bdados, "usa");
+Rel(getNotificationsByCategory, bdados, "usa");
+Rel(updateNotification, bdados, "usa");
+Rel(deleteNotification, bdados, "usa");
+
+@enduml
