@@ -4,20 +4,23 @@
 !define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
 !include FONTAWESOME/users.puml
 
+!include DEVICONS/msql_server.puml
+!include FONTAWESOME/server.puml
+!include FONTAWESOME/envelope.puml
+
 ' LAYOUT_WITH_LEGEND()
 
 Person(users, "Users", "Usuarios do sistema que acessam os calendários ( Usuário comum, Anônimo e admin)",  $sprite="users")
 
-Container(email, "Sistema De E-mail", "Sistema de autenticação do Google", "o sistema de e-mail interno do Google")
-
-
 Container_Boundary(spa, "UnicalUPE Mobile Aplication") {
     Component(Mobapp, "Mobile app", "React Native", "Dentro da aplicação o usuário tem acesso a ações como visitar o calendário, visualizar eventos, acesso a lista de eventos, notificaçoes dos eventos")
     
-    ContainerDb(bdados, "Banco de Dados", "PostgreSQL", "Central de armazenamento de dados da aplicação")
-    Component(authapi, "API Authenticator", "Sistema de autenticação do Google", "Sistema de chamada da API para o google Authenticator para login ou cadastro.")
-    Component(systemapi, "API sistema", "Java", "Conexão do sistema com  o BD a partir dos controladores ( Usuário, Evento e Notificação) .")
+    ContainerDb(bdados, "Banco de Dados", "PostgreSQL", "Central de armazenamento de dados da aplicação", "msql_server")
+    Component(authapi, "API Authenticator", "Sistema de autenticação do Google", "Sistema de chamada da API para o google Authenticator para login ou cadastro.", "server")
+    Component(systemapi, "API sistema", "Java", "Conexão do sistema com  o BD a partir dos controladores ( Usuário, Evento e Notificação) .", "server")
 }
+
+System_Ext(email, "Sistema De E-mail", "o sistema de e-mail interno do Google", "envelope")
 
 Rel(Mobapp, authapi, "Requisições", "JSON/HTTPS")
 Rel(Mobapp, systemapi, "Requisições", "JSON/HTTPS")
