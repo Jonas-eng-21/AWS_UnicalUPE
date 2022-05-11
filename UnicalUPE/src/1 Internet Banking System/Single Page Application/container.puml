@@ -4,29 +4,29 @@
 !define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
 !include FONTAWESOME/users.puml
 
-LAYOUT_WITH_LEGEND()
+' LAYOUT_WITH_LEGEND()
 
 Person(users, "Users", "Usuarios do sistema que acessam os calendários ( Usuário comum, Anônimo e admin)",  $sprite="users")
 
-Container(api, "API Authenticator", "Sistema de autenticação do Google", "Sistema de chamada da API para o google Authenticator para login ou cadastro.")
-Container(client, "API sistema", "API do sistema", "Conexão do sistema com  o BD a partir dos controladores ( Usuário, Evento e Notificação) .")
+Container(email, "Sistema De E-mail", "Sistema de autenticação do Google", "o sistema de e-mail interno do Google")
 
 
-Container_Boundary(spa, "Single Page Application") {
-    Component(routing, "Calendário", "...", "sistema de visualização, edição e adição de novos eventos")
-    Component(store, "Data Store", "Redux", "The central object holding the application state")
-    Component(login, "Formulario de Login", "React Class", "Lugar onde oo usuário irá conectar como usuário comum, anônimo ou admin")
-    Component(profile, "Profile Page", "React Class", "The page where the logged in user can view and edit his/her information")
+Container_Boundary(spa, "UnicalUPE Mobile Aplication") {
+    Component(Mobapp, "Mobile app", "React Native", "Dentro da aplicação o usuário tem acesso a ações como visitar o calendário, visualizar eventos, acesso a lista de eventos, notificaçoes dos eventos")
+    
+    ContainerDb(bdados, "Banco de Dados", "PostgreSQL", "Central de armazenamento de dados da aplicação")
+    Component(authapi, "API Authenticator", "Sistema de autenticação do Google", "Sistema de chamada da API para o google Authenticator para login ou cadastro.")
+    Component(systemapi, "API sistema", "Java", "Conexão do sistema com  o BD a partir dos controladores ( Usuário, Evento e Notificação) .")
 }
 
-Rel(spa, api, "Uses", "JSON/HTTPS")
-Rel(spa, client, "Uses", "JSON/HTTPS")
+Rel(Mobapp, authapi, "Requisições", "JSON/HTTPS")
+Rel(Mobapp, systemapi, "Requisições", "JSON/HTTPS")
 
-Rel(users, profile, "Uses");
-Rel(users, login, "Uses");
-Rel(users, routing, "Uses");
-Rel(login, store, "Uses");
-Rel(routing, store, "Uses");
-Rel(profile, store, "Uses");
+Rel(email,users,"Envia Email para")
+Rel(authapi,email,"Envia Email requisitado")
+
+Rel(users, Mobapp, "Visualizaçao da aplicação baseada na foram de login");
+Rel(authapi, bdados, "Requisições","JDBC");
+Rel(systemapi, bdados, "Requisições", "JDBC");
 
 @enduml
