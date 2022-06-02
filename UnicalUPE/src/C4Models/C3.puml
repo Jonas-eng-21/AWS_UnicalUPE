@@ -6,37 +6,37 @@
 !include FONTAWESOME/server.puml
 !include DEVICONS/msql_server.puml
 
-Container(email, "Sistema De E-mail", "Sistema de autenticação do Google", "o sistema de e-mail interno do Google")
-Component(Mobapp, "Mobile app", "React Native", "Dentro da aplicação o usuário tem acesso a ações como visitar o calendário, visualizar eventos, acesso a lista de eventos, notificaçoes dos eventos")
+Component(appUnical, "UnicalUPE App", "App Mobile: React Native", "O acesso do sistema para os usuários se da a partir do app mobile para sistemas Andoid.")
+Container_Boundary(spa, "UnicalUPE (API)"){
+    Component(ctrlEventos, "Controlador de Eventos", "Typescript" ,"Responsável por controlar os eventos usando CRUDS")
+    Component(ctrlNotificacoes, "Controlador de Notificações", "Typescript" ,"Responsável por controlar as notificações para o usuário")
+    Component(ctrlUsuario, "Controller de usuários", "Typescript" ,"Responsável por controlar os dados do usuário")
+    Component(ctrlLogin, "Controller de Login", "Typescript", "função responsável por autenticar e validar login no sistema")
 
-Container_Boundary(spa, "API Authenticator") {
-    Component(handleSignin, "Controlador de login", "Function handleSignIn", "função responsável por autenticar e validar login no sistema")
-    Component(loadProfile, "Carregamento da página", "Function loadProfile", "função responsável por carregar a página após validação dos dados do usuário")
+    Component(servLogin, "Service do Login", "Typescript", "função responsável por carregar a página após validação dos dados do usuário")
+    Component(servEvent, "Service de Eventos", "Typescript" ,"Responsável pela comunicação com os dados dos eventos")
+    Component(servNotifications, "Service de Notificação", "Typescript" ,"Responsável pela comunicação com os dados das notificações")
+    Component(servUser, "Service de Usuário", "Typescript" ,"Responsável pelos dados dos usuários")
 }
 
-Container_Boundary(spas, "API Sistema") {
-    Component(ctrleventos, "Controlador de Eventos", "GET, POST, PUT, DELETE" ,"Responsável por controlar os eventos usando CRUDS (AppContext)")
-    Component(ctrlNotificacoes, "Controlador de Notificações", "GET, PUT, DELETE" ,"Responsável por controlar as notificações para o usuário (AppContext)")
-    Component(ctrlUsuario, "Controlador de usuários", "GET, POST, PUT, DELETE" ,"Responsável por controlar os dados do usuário (AppContext)")
-   
-}
+System_Ext(goauth, "Google Authenticator", "O usuário valida sua identidade através da aplicação.")
+ContainerDb(bdados, "Banco de Dados: PostgreSQL", "Central de armazenamento de dados da aplicação, dados dos eventos, notificações, usuarios", "msql_server")
 
-ContainerDb(bdados, "Banco de Dados", "PostgreSQL", "Verifica os dados do usuário solcitado para a função handleProfile ", "msql_server")
+Rel(appUnical, ctrlEventos, "Faz chamadas da API para", "JSON/HTTPS");
+Rel(appUnical, ctrlNotificacoes, "Faz chamadas da API para", "JSON/HTTPS");
+Rel(appUnical, ctrlUsuario, "Faz chamadas da API para", "JSON/HTTPS");
+Rel(appUnical, ctrlLogin, "Faz chamadas da API para", "JSON/HTTPS");
 
-System_Ext(email, "Sistema De E-mail", "o sistema de e-mail interno do Google (Google Autenticathor)", "envelope")
+Rel(ctrlEventos, servEvent, "usa");
+Rel(ctrlNotificacoes, servNotifications, "usa");
+Rel(ctrlUsuario, servUser, "usa");
+Rel(ctrlLogin, servUser, "usa");
+Rel(ctrlLogin, servLogin, "usa");
 
+Rel(servLogin, goauth, "usa");
+Rel(servEvent, bdados, "usa");
+Rel(servNotifications, bdados, "usa");
+Rel(servUser, bdados, "usa");
 
-Rel(Mobapp, handleSignin, "Faz Chamadas De API Para", "JSON/HTTPS")
-Rel(Mobapp, ctrleventos, "Faz Chamadas De API Para", "JSON/HTTPS")
-Rel(Mobapp, ctrlNotificacoes, "Faz Chamadas De API Para", "JSON/HTTPS")
-Rel(Mobapp, ctrlUsuario, "Faz Chamadas De API Para", "JSON/HTTPS")
-
-Rel(handleSignin, email, "usa");
-Rel(email, bdados, "Faz chamada para");
-Rel(bdados, loadProfile, "Resposta da chamada");
-
-Rel(ctrleventos, bdados,"Lê e Escreve Para", "JDBC");
-Rel(ctrlNotificacoes, bdados,"Lê e Escreve Para", "JDBC");
-Rel(ctrlUsuario, bdados,"Lê e Escreve Para", "JDBC");
 
 @enduml

@@ -1,13 +1,12 @@
 @startuml
 !include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Context.puml
 
-Person(pbc, "Usuário", "Usuarios do sistema que acessam os calendários")
-System(ibs, "Sistema UnicalUPE", "Permite que os usuários visualizem o calendário acadêmico. Podem receber notificações e adicionar/gerenciar informações ao calendário")
-System(es, "Google Authenticator", "realizado através da autenticação com o login do google")
-System(mbs, "Servidor UnicalUPE", "Responsável por salvar os dados, fornecer informações, enviar notificaçõesa ao usuário, validar campos")
+Person(user, "Usuário", "Usuarios do sistema que desejam acesso ao calendario acadêmico")
+System(app, "Sistema UnicalUPE","Permite que os usuários visualizem o calendário acadêmico, podendo receber notificações, visualizar, adicionar e gerenciar informações do calendário")
+System_Ext(auth, "Google Authenticator", "O usuário valida seu identidade através da aplicação")
+System_Ext(server, "Heroku", "Responsável por hospedar o banco de dados")
 
-Rel(pbc, ibs, "Usuários")
-Rel(es, pbc, "Envia e-mails de atutenticação")
-Rel(ibs, es, "Solicita Login")
-Rel(ibs, mbs, "Usuários")
+Rel(user, app, "Buscam, modificam e adicionam eventos acadêmicos usando o")
+Rel(app, auth, "Utiliza o serviço de autenticação do")
+Rel(app, server, "Está hospedado no")
 @enduml

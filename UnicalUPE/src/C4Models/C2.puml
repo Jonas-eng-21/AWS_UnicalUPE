@@ -10,26 +10,26 @@
 
 ' LAYOUT_WITH_LEGEND()
 
-Person(users, "Users", "Usuarios do sistema que acessam os calendários ( Usuário comum, Anônimo e admin)",  $sprite="users")
+Person(users, "Usuário", "Usuarios do sistema que desejam acesso ao calendario acadêmico",  $sprite="users")
 
-Container_Boundary(spa, "UnicalUPE Mobile Aplication") {
-    Component(Mobapp, "Mobile app", "React Native", "Dentro da aplicação o usuário tem acesso a ações como visitar o calendário, visualizar eventos, acesso a lista de eventos, notificaçoes dos eventos")
-    
-    ContainerDb(bdados, "Banco de Dados", "PostgreSQL", "Central de armazenamento de dados da aplicação", "msql_server")
-    Component(authapi, "API Authenticator", "Sistema de autenticação do Google", "Sistema de chamada da API para o google Authenticator para login ou cadastro.", "server")
-    Component(systemapi, "API sistema", "Java", "Conexão do sistema com  o BD a partir dos controladores ( Usuário, Evento e Notificação) .", "server")
+System_Boundary(App, "UnicalUPE") {
+
+    Component(appUnical, "UnicalUPE App", "App Mobile: React Native", "Dentro da aplicação o usuário tem acesso a ações como visitar o calendário, visualizar eventos, acesso a lista de eventos, notificaçoes dos eventos. Disponível para sistemas Andorid.")
+
+    System_Boundary(Heroku,"Heroku") {
+        ContainerDb(bdados, "UnicalUPE BD", "Banco de Dados: PostgreSQL", "Central de armazenamento de dados da aplicação, dados dos eventos, notificações, usuarios", "msql_server")
+        Component(systemapi, "UnicalUPE API", "API: Java(Spring Boot)", "API que será consumida pelo App Mobile", "server")
+    }
 }
 
-System_Ext(email, "Sistema De E-mail", "o sistema de e-mail interno do Google", "envelope")
+System_Ext(goauth, "Google Authenticator", "O usuário valida seu identidade através da aplicação.")
 
-Rel(Mobapp, authapi, "Requisições", "JSON/HTTPS")
-Rel(Mobapp, systemapi, "Requisições", "JSON/HTTPS")
+Rel(appUnical, goauth,"Utiliza a biblioteca de frontend do")
+Rel(appUnical, goauth,"Utiliza a biblioteca de backend do")
+Rel(appUnical, systemapi, "Se comunica com")
 
-Rel(email,users,"Envia Email para")
-Rel(authapi,email,"Envia Email requisitado")
 
-Rel(users, Mobapp, "Visualizaçao da aplicação baseada na foram de login");
-Rel(authapi, bdados, "Requisições","JDBC");
-Rel(systemapi, bdados, "Requisições", "JDBC");
+Rel(users, appUnical, "Visualizaçao da aplicação baseada na foram de login");
+Rel(systemapi, bdados, "Utiliza o SGBD");
 
 @enduml
